@@ -1,0 +1,21 @@
+{
+  "name": "prawner",
+  "version": "0.0.0",
+  "author": "Gavin Lloyd <gavinhungry@gmail.com>",
+  "description": "Spawn shell commands with Promises",
+  "license": "MIT",
+
+  "keywords": [
+    "command",
+    "shell",
+    "spawn"
+  ],
+
+  "homepage": "https://github.com/gavinhungry/prawner",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/gavinhungry/prawner.git"
+  },
+
+  "main": "prawner.js"
+}
