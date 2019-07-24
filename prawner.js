@@ -47,27 +47,39 @@ let stream = (child, stdio, {
  * @param {String} [opts.stdin]
  * @param {String} [opts.encoding]
  * @param {String} [opts.verbose]
- * @return {Promise.<String>}
+ * @param {Boolean} [opts.raw] - include stdout, stderr and exit code
+ * @return {Promise.<String|Object>}
  */
 let prawner = (cmd, {
   stdin,
   encoding = ENCODING,
-  verbose = false
+  verbose = false,
+  raw = false
 } = {}) => new Promise((resolve, reject) => {
   let child = spawn(cmd, {
     shell: true
   });
 
-  let stderr = stream(child, 'stderr', { verbose });
-  let stdout = stream(child, 'stdout', { verbose });
+  let stdoutStream = stream(child, 'stdout', { verbose });
+  let stderrStream = stream(child, 'stderr', { verbose });
 
   child.on('exit', code => {
-    if (code !== 0) {
-      return reject(new Error(stderr()));
+    let stdout = stdoutStream().trim();
+    let stderr = stderrStream().trim();
+
+    if (raw) {
+      return resolve({
+        stdout,
+        stderr,
+        code
+      });
     }
 
-    let output = stdout().trim();
-    resolve(output);
+    if (code !== 0) {
+      return reject(new Error(stderr));
+    }
+
+    resolve(stdout);
   });
 
   if (stdin) {
