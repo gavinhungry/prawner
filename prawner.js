@@ -71,7 +71,7 @@ let prawner = (cmd, {
       return resolve({
         stdout,
         stderr,
-        code
+        exitCode: code
       });
     }
 
