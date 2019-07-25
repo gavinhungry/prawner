@@ -1,6 +1,6 @@
 {
   "name": "prawner",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "Gavin Lloyd <gavinhungry@gmail.com>",
   "description": "Spawn shell commands with Promises",
   "license": "MIT",
