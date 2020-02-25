@@ -44,6 +44,7 @@ let stream = (child, stdio, {
  *
  * @param {String} cmd
  * @param {Object} [opts]
+ * @param {AbortSignal} [opts.signal]
  * @param {String} [opts.stdin]
  * @param {String} [opts.encoding]
  * @param {String} [opts.verbose]
@@ -51,6 +52,7 @@ let stream = (child, stdio, {
  * @return {Promise.<String|Object>}
  */
 let prawner = (cmd, {
+  signal,
   stdin,
   encoding = ENCODING,
   verbose = false,
@@ -59,6 +61,17 @@ let prawner = (cmd, {
   let child = spawn(cmd, {
     shell: true
   });
+
+  if (signal) {
+    let onAbort = () => {
+      child.kill();
+
+      signal.removeEventListener('abort', onAbort);
+      reject(new Error('Aborted'));
+    };
+
+    signal.addEventListener('abort', onAbort);
+  }
 
   let stdoutStream = stream(child, 'stdout', { verbose });
   let stderrStream = stream(child, 'stderr', { verbose });
